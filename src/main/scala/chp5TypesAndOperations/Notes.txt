@@ -1,0 +1,40 @@
+The interpreter always displays integer literals in base 10.
+Integer literals: Byte, Short, Int, Long
+Integer literals beginning with 0x are hex (base 16)
+Integer literals ending with L are Long (64-bit sign 2's comp. integer)
+Values ending in F are Floats, D for Double
+You can use `e` for exponentiation: 123e45 is a Double
+
+A character literal is any unicode character between single quotes
+You can also use Unicode code point to define a Char: '\u0041'
+You can also use Unicode code point identifiers in Scala source code
+There exist special chars like backslash denoted with an escape char: '\\'
+
+A String literal is denoted with double quotes
+val escapes = "\\\"\'" = \"'
+Raw strings are denoted with triple double quotes: """    """
+
+Symbol literals are written: 'ident
+Ex: val s = 'aSymbol; val nm = s.name
+Symbol literals are "interned", if you write the same symbol twice,
+then both expressions will refer to the exact same symbol object.
+
+Boolean literals: `true`, `false`
+
+Basic string interpolation: println(s"Hello, $name!")
+println(s"The answer is ${ 21 * 2 }")
+The `raw` string interpolator doesn't recognize char literal escape seqs
+Example: println(raw"No\\\\escape!") prints: No\\\\escape!
+The `f` string interpolator allows for formatted printing
+Example: f"${math.Pi}%0.5f" res0: String = 3.14159
+
+Operator overloading: all methods can be overloaded
+All methods can be written in infix notation: s indexOf 'o'
+Methods with multiple params in infix notation must be in parens
+Ex: s indexOf ('o', 5)
+Prefix and postfix operators are unary, unlike infix
+Postfix convention: you can leave off parens if there are no side effects
+Ex: s.toLowercase, Ex: println(s)
+
+Logical operators are "short circuiting"
+

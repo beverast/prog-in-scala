@@ -1,0 +1,10 @@
+Scala
+Haskell
+Perl
+Scheme
+Racket
+ML
+Lisp
+Erlang
+Idris
+Coq

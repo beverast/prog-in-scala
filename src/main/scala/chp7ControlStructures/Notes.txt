@@ -1,0 +1,74 @@
+Standard imperative style:
+var filename = "default.txt"
+if (!args.isEmpty)
+    filename = args(0)
+
+Functional style (no vars):
+val filename =
+    if (!args.isEmpty) args(0)
+    else "default.txt"
+
+- Scala has a while loop construct (tests condition at start of loop)
+- and a do-while loop (tests condition at the end of the loop)
+- Both while and do-while are of type Unit
+
+- For expressions can have nested clauses
+val forLineLength =
+    for {
+        file <- filesHere
+        if file.getName.endsWith(".scala")
+        line <- fileLines(file)
+        trimmed = line.trim
+        if trimmed.matches(".*for.*")
+    } yield trimmed.length
+
+- Try expression:
+val half =
+    if (n % 2 == 0)
+        n / 2
+    else
+        throw new RuntimeException("n must be even.")
+
+- Try & Catch & Finally clauses:
+import java.io.FileReader
+import java.io.FileNotFoundException
+import java.io.IOException
+
+try {
+    val f = new FileReader("input.txt")
+    // Use and close file
+} catch {
+    case ex: FileNotFoundException => // Handle missing file
+    case ex: IOException => // Handle other I/O error
+} finally {
+    f.close() // Be sure to close the file, exception or not.
+}
+
+- Catch clauses can also yield values
+import java.net.URL
+import java.net.MalformedURLException
+
+def urlFor(path: String) =
+    try {
+        new URL(path)
+    } catch {
+        case e: MalformedURLException =>
+            new URL("https://scala-lang.org")
+    }
+
+
+- Finally overrides Try
+def f(): Int = try return 1 finally return 2 // returns 2
+def g(): Int = try 1 finally 2 // returns 1
+
+- Match expressions: switch statements on steroids
+val firstArg = if (args.length > 0) args(0) else ""
+
+val friend =
+    firstArg match {
+        case "salt" => println("pepper")
+        case "chips" => println("salsa")
+        case "eggs" => println("bacon")
+        case _ => println("Umm...")
+    }
+println(friend)

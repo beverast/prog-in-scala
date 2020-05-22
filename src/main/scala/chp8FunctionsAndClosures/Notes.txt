@@ -1,0 +1,108 @@
+First Class Functions:
+- A function literal is a lambda function, it is unnamed.
+- A function value is the object entity of a function literal
+- A func. literal exists in the source, a func. value exists in the runtime as an object
+- Function values are objects so they can be stored in variables
+- Example of function literal: var increase = (x: Int) => x + 1
+
+- Multi-line function literal:
+var increase = (x: Int) => {
+    println("He")
+    println("Was")
+    println("Number 1")
+    x + 1
+}
+
+- Another example of function literals:
+listOfNumbers.foreach(println)
+listOfNumbers.filter(_ > 0) // Placeholder syntax
+listOfNumbers.filter((x: Int) => x > 0)
+listOfNumbers.filter(x => x > 0)
+
+- Another example of placeholder syntax (multiple placeholders == multiple params):
+val f = (_: Int) + (_: Int)
+f(5, 10) // res0: Int = 15
+
+Partially Applied Functions:
+- "Apply the function to the arguments"
+- Example: someNumbers.foreach(println _)
+- Or, for a partially-applied func with no args applied: someNumbers.foreach(println)
+- Example:
+def sum(a: Int, b: Int, c: Int) = a + b + c
+val a = sum _
+a(1, 2, 3) // res0: Int = 6
+
+Closures:
+- A closure is a function object who's "free variable" is captured at runtime
+- Example:
+val more = 10 // free var
+val addMore = (x: Int) => x + more // closure
+addMore(10)
+
+- A function literal with no free variables is called a "closed term", a closure is an "open term"
+
+- Example of closure with scoping:
+def makeIncreaser(more: Int) = (x: Int) => x + more
+val inc1 = makeIncreaser(1)
+val inc999 = makeIncreaser(999)
+inc1(10) // res: Int = 11
+inc999(1) // res: Int = 1000
+
+
+Special Function Call Forms
+
+Variable-length Parameters Example:
+def echo(args: String*) =
+    for (arg <- args) println(arg)
+echo("hi")
+echo("hello", "world")
+
+Argument unpacking:
+val seq = Seq("What", "is", "up", "doc")
+echo(seq) // ERROR
+echo(seq: _*)
+
+Named Arguments:
+def speed(distance: Float, time: Float) = distance / time
+speed(distance = 100, time = 10)
+speed(time = 10, distance = 100) // equivalent
+
+Default Parameter Values:
+Example:
+def printTime(out: java.io.PrintStream = Console.out, divisor: Int = 1) =
+    out.println("time= " + System.currentTimeMillis())
+printTime(divisor = 1000)
+
+
+Tail Recursion
+- Functions that call themselves as their last action are "tail recursive"
+- The scala compiler optimizes these functions to often be as performant as the iterative approach
+- A new stack frame won't be built on each call, a TCO function operates in the same frame
+- Non-TCO example:
+def boom(x: Int) =
+    if (x==0) throw new Exception("Boom!")
+    else boom(x - 1) + 1
+
+- TCO example:
+def bang(x: Int) =
+    if (x==0) throw new Excpetion("Bang!")
+    else bang(x - 1)
+
+`boom` isn't TCO because there is an increment after calling itself
+
+- Due to JVM limitations only directly-called functions can be TCO
+- Indirect recursion can't be TCO
+- Example:
+def isEven(x: Int): Boolean =
+    if (x == 0) true else isOdd(x - 1)
+def isOdd(x: Int): Boolean =
+    if (x == 0) false else isEven(x - 1)
+
+- Also, no TCO if the final call goes to a function value
+- Example:
+val funValue = nestedFun _
+def nestedFun(x: Int) : Unit = {
+    if (x != 0) { println(x); funValue(x - 1) }
+}
+
+Ultimately, TCO only happens on functions that directly call themselves as their final operation.
